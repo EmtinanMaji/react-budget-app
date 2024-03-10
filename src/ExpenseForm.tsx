@@ -6,13 +6,21 @@ type ExpenseType = {
     source: string;
     amount: number;
     date: string;
-
 };
-const ExpenseForm = () => {
+type ExpenseFormProps = {
+    onGetTotalExpense: (amount: number) => void;
+};
+
+export const ExpenseForm = (props:ExpenseFormProps ) => {
     const [source,setSource]=useState<string>('');
     const [amount,setAmount]=useState<number>(0);
     const [date,setDate]=useState<string>('');
     const [expenses,setExpense]=useState<ExpenseType[]>([]);
+
+    const totalAmount = expenses.reduce(
+        (total, value) => total + value.amount,0
+    );
+    props.onGetTotalExpense(totalAmount);
 
     const handleSourceChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSource(event.target.value);
@@ -43,6 +51,11 @@ const ExpenseForm = () => {
         setDate('');
 
     }
+    const handleDeleteExpenses = (id?: string) => {
+        setExpense((prevExpenses) => {
+          return prevExpenses.filter((Expense) => Expense.id !== id);
+        });
+      };
     return(
         <div>
             <form onSubmit={handleSubmit}>
@@ -64,7 +77,7 @@ const ExpenseForm = () => {
             <ul>
                 {expenses.map((expense) => {
                     return(
-                        <li key={expense.id}>{expense.source}: {expense.amount} EUR on {expense.date} </li>
+                        <li key={expense.id}>{expense.source}: {expense.amount} EUR on {expense.date} <button onClick={() => handleDeleteExpenses(expense.id)}>Delete</button></li>
                     );
                 })}
             </ul>

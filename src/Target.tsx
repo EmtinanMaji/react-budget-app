@@ -1,19 +1,30 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 
-const Target = () => {
+export const Target = (props: {onSavingAmount: number}) => {
+    
+    
+    const [target,setTarget]=useState<number>(0);
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setTarget(Number(event.target.value));
+    }
+
+    const percentage = target !== 0 ? (props.onSavingAmount / target) * 100 : 0;
+
+
     return(
         <div>
-            <form>
+            <form >
                 <div className="target-field">
                     <label htmlFor="target">Set Target:</label>
-                    <input type="text" name="target" id="target" required />
+                    <input type="text" name="target" id="target" value={target} onChange={handleChange} required />
                 </div>
                 <button>Reset</button>
                 
                 <div className="target-field">
-                    <p>Current saving: 100</p>
-                    <p>Target: 2000</p>
-                    <p>{''}<progress max={4000} value={1000} /></p>
+                    <p>Current saving: {props.onSavingAmount}</p>
+                    <p>Target: {target}</p>
+                    <p> progress: {percentage}% <progress max={100} value={percentage} /></p>
                 </div>
             </form>
         </div>

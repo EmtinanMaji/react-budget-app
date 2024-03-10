@@ -8,17 +8,25 @@ type IncomeType = {
     date: string;
 
 };
-const IncomeForm = () => {
+type IncomeFormProps = {
+    onGetTotalIncome: (amount: number) => void;
+};
+export const IncomeForm = (props:IncomeFormProps) => {
     const [source,setSource]=useState<string>('');
     const [amount,setAmount]=useState<number>(0);
     const [date,setDate]=useState<string>('');
     const [incomes,setIncomes]=useState<IncomeType[]>([]);
 
+    const totalAmount = incomes.reduce(
+        (total, value) => total + value.amount,0
+    );
+    props.onGetTotalIncome(totalAmount);
+
+
     const handleSourceChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSource(event.target.value);
     }
     const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const {value}= event.target;
         setAmount(Number(event.target.value));
     }
     const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +52,11 @@ const IncomeForm = () => {
         setDate('');
 
     };
-
+    const handleDeleteIncome = (id?: string) => {
+        setIncomes((prevIncomes) => {
+          return prevIncomes.filter((income) => income.id !== id);
+        });
+      }
     return(
         <div>
             <form onSubmit={handleSubmit}>
@@ -65,7 +77,7 @@ const IncomeForm = () => {
             <ul>
                 {incomes.map((income) => {
                     return(
-                        <li key={income.id} > {income.source}: {income.amount} EUR on {income.date} </li>
+                        <li key={income.id} > {income.source}: {income.amount} EUR on {income.date} <button onClick={() => handleDeleteIncome(income.id)}>Delete</button></li>
                     );
                 })}
             </ul>
