@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import './App.css';
-import IncomeForm from './IncomeForm'
-import ExpenseForm from './ExpenseForm'
-import Target from './Target'
-import Transfer from './Transfer'
+import '../style/App.css';
+import IncomeForm from '../components/IncomeForm'
+import ExpenseForm from '../components/ExpenseForm'
+import Target from '../components/Target'
+import Transfer from '../components/Transfer'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -22,14 +24,15 @@ function App() {
   }
   return (
     <div className="App">
-      <IncomeForm onGetTotalIncome = {getTotalIncome}/>
-      <ExpenseForm onGetTotalExpense = {getTotalExpense}/>
-      <Target onSavingAmount = {savingAmount}/>
-      <Transfer 
-      onGetSavingAmount = {getSavingAmount}
-      totalIncomeAmount = {totalIncome}
-      totalExpenseAmount = {totalExpense}
-      />
+      <ToastContainer />
+      <IncomeForm onGetTotalIncome = {getTotalIncome} />
+      <ExpenseForm onGetTotalExpense = {getTotalExpense} />
+      <Target onSavingAmount = {savingAmount} />
+              <Transfer 
+                onGetSavingAmount = {getSavingAmount}
+                totalIncomeAmount = {totalIncome}
+                totalExpenseAmount = {totalExpense} />
+            
     </div>
   );
 }

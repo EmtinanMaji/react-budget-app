@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "components/IncomeForm.tsx", "components/Target.tsx"  ]
 }

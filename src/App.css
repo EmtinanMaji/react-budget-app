@@ -1,8 +1,0 @@
-.App {
-  display: grid;
-  grid-template-columns: repeat(2,auto);
-  text-align: center;
-}
-form{
-  margin: 2rem;
-}
