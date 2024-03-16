@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 
 export const Target = (props: {onSavingAmount: number}) => {
@@ -6,9 +6,9 @@ export const Target = (props: {onSavingAmount: number}) => {
     const [target,setTarget]=useState<number>(0);
     const [percentage,setPercentage] = useState(0);
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setTarget(Number(event.target.value));
-    }
+    },[]);
 
     useEffect(()=>{ 
         if(props.onSavingAmount > 0 && target > 0){
@@ -16,10 +16,11 @@ export const Target = (props: {onSavingAmount: number}) => {
             setPercentage(progress);
         }
     })
-    const handleReset = ()=> {
+    const handleReset = useCallback(()=> {
         setTarget(0);
         setPercentage(0)
-    }
+    },[]);
+    
     return(
         <div>
             <form >

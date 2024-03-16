@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type TransferForSavingProps = {
     onGetSavingAmount: (amount: number) => void;
@@ -11,11 +11,11 @@ export const Transfer = (props:TransferForSavingProps) => {
     const [amount,setTransfer]=useState<number>(0);
     const [successMessage, setSuccessMessage] = useState("");
 
-    const handleTransferChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleTransferChange =useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setTransfer(Number(event.target.value));
 
-    }
-    const onSubmit = (data: { amount: number }) => {
+    }, []);
+    const onSubmit: SubmitHandler<{ amount: number }> = useCallback((data) => {
         props.onGetSavingAmount(amount);
 
         setSuccessMessage("Transfer added successfully.");
@@ -24,12 +24,16 @@ export const Transfer = (props:TransferForSavingProps) => {
           }, 4000);
 
           reset();
-    }
+    }, [amount, props.onGetSavingAmount, reset]);
+    const currentBalance = useMemo(() => {
+        return props.totalIncomeAmount - props.totalExpenseAmount;
+    }, [props.totalIncomeAmount, props.totalExpenseAmount]);
+
     return(
         <div>
             
             <form onSubmit={handleSubmit(onSubmit)}>
-            <label htmlFor="balance">Current balance: {props.totalIncomeAmount - props.totalExpenseAmount} <br/></label>
+            <label htmlFor="balance">Current balance: {currentBalance} <br/></label>
                 <div className="Transfer-field">
                 
                     <label htmlFor="transfer">Transfer to saving account:</label>
